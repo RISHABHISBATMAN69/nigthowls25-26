@@ -387,9 +387,9 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Background music — put your file at audio/theme.mp3 (or edit the src below) -->
+<!-- Background music — theme.mp3 sits in the same folder as index.html -->
 <audio id="bgAudio" loop preload="none">
-  <source src="audio/theme.mp3" type="audio/mpeg">
+  <source src="theme.mp3" type="audio/mpeg">
 </audio>
 <button id="audioToggle" title="Toggle music">🔈</button>
 
@@ -747,7 +747,7 @@
     audio.volume = 0.45;
 
     function setPlayingUI(isPlaying){
-      btn.textContent = isPlaying ? '🔊' : '🔇';
+      btn.textContent = isPlaying ? '🔊' : '🔈';
       btn.classList.toggle('playing', isPlaying);
     }
 
