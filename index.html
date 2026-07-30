@@ -135,14 +135,14 @@
      ===================================================== */
   #audioToggle{
     position:fixed; bottom:24px; left:24px; z-index:900;
-    width:44px; height:44px; border-radius:50%;
-    background:rgba(255,255,255,.08); border:1px solid var(--line); color:var(--snow);
-    display:flex; align-items:center; justify-content:center; font-size:1.15rem;
+    height:44px; padding:0 18px; border-radius:100px;
+    background:rgba(255,255,255,.1); border:1px solid var(--line); color:var(--snow);
+    display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:600;
     backdrop-filter:blur(4px); transition:background .2s ease, transform .15s ease;
   }
-  #audioToggle:hover{ background:rgba(255,255,255,.16); }
-  #audioToggle:active{ transform:scale(.92); }
-  #audioToggle.playing{ border-color:var(--ember); color:var(--ember-glow); }
+  #audioToggle:hover{ background:rgba(255,255,255,.18); }
+  #audioToggle:active{ transform:scale(.96); }
+  #audioToggle.playing{ border-color:var(--ember); color:var(--ember-glow); background:rgba(217,30,54,.12); }
 
   /* =====================================================
      APP SHELL
@@ -391,7 +391,7 @@
 <audio id="bgAudio" loop preload="none">
   <source src="theme.mp3" type="audio/mpeg">
 </audio>
-<button id="audioToggle" title="Toggle music">🔈</button>
+<button id="audioToggle" title="Toggle music">🔈 Play music</button>
 
 <script>
 (function(){
@@ -747,31 +747,20 @@
     audio.volume = 0.45;
 
     function setPlayingUI(isPlaying){
-      btn.textContent = isPlaying ? '🔊' : '🔈';
+      btn.textContent = isPlaying ? '🔊 Music on' : '🔈 Play music';
       btn.classList.toggle('playing', isPlaying);
     }
 
     btn.addEventListener('click', () => {
       if(audio.paused){
-        audio.play().then(() => setPlayingUI(true)).catch(() => {
-          showToast('Add theme.mp3 to your repo to enable music');
+        audio.play().then(() => setPlayingUI(true)).catch(err => {
+          showToast('Audio error: ' + (err && err.message ? err.message : err));
         });
       } else {
         audio.pause();
         setPlayingUI(false);
       }
     });
-
-    // Browsers block autoplay-with-sound until a user interacts with the
-    // page at all — so the first tap/click ANYWHERE quietly starts the
-    // music too, not just the speaker button itself.
-    function tryAutoStart(){
-      audio.play().then(() => setPlayingUI(true)).catch(() => { /* still blocked, that's fine */ });
-      document.removeEventListener('click', tryAutoStart);
-      document.removeEventListener('touchstart', tryAutoStart);
-    }
-    document.addEventListener('click', tryAutoStart, { once:true });
-    document.addEventListener('touchstart', tryAutoStart, { once:true });
   }
 
   /* ---------------- EVENTS ---------------- */
